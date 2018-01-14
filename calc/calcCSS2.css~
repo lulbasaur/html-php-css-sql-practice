@@ -1,0 +1,45 @@
+
+
+
+input[type=text] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    background-color:lightblue;
+    font-family: Courier;
+}
+
+
+input[type=button] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    background-color: lightcyan;
+    font-family: fantasy;
+
+}
+
+
+
+input.number{
+
+    background-color: lightblue;
+    
+}
+
+
+#clear{
+
+    background-color: lightcoral;
+    
+}
+#form{
+
+    width: 50%;
+}
+
+body{
+    background-color: #F666FA;
+}

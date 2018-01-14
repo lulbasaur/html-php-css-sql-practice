@@ -1,0 +1,50 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>
+    Simple Calculator
+</title>
+    </head>
+    <body>
+    
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+    input = window.prompt("Enter a simple equation");
+    var numberString = ""
+    var numberString2 = ""
+    var numberList = new Array();
+for(var i = 0; i < input.length - 1; i++) {
+    
+
+    if (input.charAt(i) != ) {
+	
+    }
+
+}
+
+
+
+
+</script>
+
+</body>
+</html>

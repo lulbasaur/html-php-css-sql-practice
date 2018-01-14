@@ -1,0 +1,238 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>
+    Simple Calculator
+</title>
+    </head>
+    <body>
+    
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+function isOp(num){
+    if (num == '/'){
+	return true;
+    }
+    else if (num == '*'){
+	return true;
+    }
+    else if (num == '+'){
+	return true;
+    }
+    else if (num == '-'){
+	return true;
+    }
+    else{
+	return false;
+    }
+}
+
+function operation(op1,op2,oper){
+    if (oper == '/'){
+	return parseFloat(op1) / parseFloat(op2);
+    }
+    else if (oper == '*'){
+	return parseFloat(op1) * parseFloat(op2);
+    }
+    else if (oper == '+'){
+	return parseFloat(op1) + parseFloat(op2);
+    }
+    else if (oper == '-'){
+	return parseFloat(op1) - parseFloat(op2);
+    }
+    else{
+	return 1337; //should not happen
+    }
+}
+
+
+function getNextNumber(numString,index){
+
+    var returnNumber = "";
+    var minusCount = 0;
+    
+    for(var i = index; i < numString.length; i++){
+
+	if (isNumber(numString.charAt(i)) == false){
+	    
+	    if (numString.charAt(i) == '-' && index == 0 && minusCount < 1) {
+		returnNumber = returnNumber + "-";
+		minusCount++;
+	    }
+	    
+	    else if(numString.charAt(i) == '-' && isNumber(numString.charAt(i+1)) && minusCount < 1){
+		returnNumber = returnNumber + numString.substring(i,i+1);
+		minusCount++;
+	    }
+	    
+	    else{
+		break;
+	    }
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == false){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	    break;
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == true){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	}
+	
+    }
+    return returnNumber;
+}
+
+function getNextExpression(numString,index){
+    var expression = "";
+    for(var i = index; i < numString.length; i++) {
+	if(numString.charAt(i) == ')'){
+	    return expression;
+	}
+	else{
+	    expression = expression + numString.charAt(i);
+	}
+    }
+}
+
+function arrayAddSub(array){
+    var result = '0';
+    for(var i = 0; i < array.length; i++) {
+	if(i == 0 && isNumber(array[i])){
+	    result = operation(result,array[i],'+');
+	}
+	else if (isNumber(array[i])) {
+	    result = operation(result,array[i],array[i-1]);
+	}
+	else if (i == array.length-1){
+	    result = operation(result,array[i],array[i-1]);
+	}
+    }
+    
+    return result;
+}
+
+
+
+function traverseCalc(input){
+
+    var expressionList = [];
+    
+    var nextNum = "";
+    var nextOp = "";
+    //parse to array 
+    for(var i = 0; i < input.length; i++) {
+	
+	nextNum = getNextNumber(input,i);
+	expressionList.push(nextNum);
+	i = i + nextNum.length - 1;
+	
+
+	if (i < input.length-1) {
+	    nextOp = input.charAt(i+1);
+	    expressionList.push(nextOp);
+	    i = i + 1;
+	}
+	
+    }
+    //end parse    
+    var additionSubtraction = [];
+    var current = '0';
+    for(var i = 0; i < expressionList.length; i++) {
+
+	if (isOp(expressionList[i])) {
+	    
+	    if(expressionList[i] == '+' || expressionList[i] == '-'){
+
+		if (current != 0) {
+		    additionSubtraction.push(current.toString());		    
+		}
+
+		current = 0;
+		if (i == expressionList.length-2) {
+
+		    if (expressionList[i-1] != null) {
+			additionSubtraction.push(expressionList[i-1]);
+		    }
+		    additionSubtraction.push(expressionList[i]);
+		    additionSubtraction.push(expressionList[i+1]);
+
+		}
+		else if(expressionList[i-1] != null){
+		    additionSubtraction.push(expressionList[i-1]);
+		    additionSubtraction.push(expressionList[i]);
+		    
+		}
+		else{
+		    additionSubtraction.push(expressionList[i]);
+		    		    
+		}
+		
+	    }
+	    else if(expressionList[i] == '*' || expressionList[i] == '/'){
+		if (i == expressionList.length - 2) {
+		    if (expressionList[i-1] != null) {
+			current = operation(expressionList[i-1],expressionList[i+1],expressionList[i]);
+		    }
+		    else{
+			current = operation(current,expressionList[i+1],expressionList[i]);
+		    }
+		    additionSubtraction.push(current);
+		}
+		else if(expressionList[i-1] != null){
+		    
+		    current = operation(expressionList[i-1],expressionList[i+1],expressionList[i]);
+		    expressionList[i-1] = null;
+		    expressionList[i+1] = null;
+
+		}
+		else if (expressionList[i-1] == null) {
+		    current = operation(current,expressionList[i+1],expressionList[i]);
+		    expressionList[i+1] = null;
+		}
+	    }
+	}
+	
+    }
+
+    current = arrayAddSub(additionSubtraction);
+
+    return current;
+}
+
+
+
+
+userInput = window.prompt("Enter a simple equation");
+
+
+result = traverseCalc(userInput);
+
+document.write('<p>');
+document.write("Input: " + userInput + ", Result: "+ result + " ");
+document.write('</p>');
+
+
+
+
+</script>
+
+</body>
+</html>

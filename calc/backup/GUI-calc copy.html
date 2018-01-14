@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      Simple Calculator
+    </title>
+    <link rel="stylesheet" type="text/css" href= "calcCSS1.css">
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+function operation(op1,op2,oper){
+    if (oper == '/'){
+	return parseFloat(op1) / parseFloat(op2);
+    }
+    else if (oper == '*'){
+	return parseFloat(op1) * parseFloat(op2);
+    }
+    else if (oper == '+' || '-'){
+	return parseFloat(op1) + parseFloat(op2);
+    }
+    else{
+	return 1337; //should not happen
+    }
+}
+
+
+// -10 *-10
+function getNextNumber(numString,index){
+
+    var returnNumber = "";
+    var minusCount = 0;
+    
+    for(var i = index; i < numString.length; i++){
+
+	if (isNumber(numString.charAt(i)) == false){
+	    
+	    if (numString.charAt(i) == '-' && index == 0 && minusCount < 1) {
+		returnNumber = returnNumber + "-";
+		minusCount++;
+	    }
+	    
+	    else if(numString.charAt(i) == '-' && isNumber(numString.charAt(i+1)) && minusCount < 1){
+		returnNumber = returnNumber + numString.substring(i,i+1);
+		minusCount++;
+	    }
+	    
+	    else{
+		break;
+	    }
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == false){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	    break;
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == true){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	}
+	
+    }
+    return returnNumber;
+}
+
+function getNextExpression(numString,index){
+    var expression = "";
+    for(var i = index; i < numString.length; i++) {
+	if(numString.charAt(i) == ')'){
+	    return expression;
+	}
+	else{
+	    expression = expression + numString.charAt(i);
+	}
+    }
+}
+
+function traverseCalc(input){
+    
+    var op1 = "";
+    var op2 = "";
+    var num1 = "0";
+    var num2 = "0";
+    var num3 = "0";
+
+    var numCount = 0;
+    var opCount = 0;
+
+    var result1 = 0;
+    var result2 = 0;
+    
+    for(var i = 0; i < input.length; i++) {
+
+	if (isNumber(input.charAt(i)) == false && input.charAt(i) != '-' && opCount == 0) {
+
+	    op1 = input.charAt(i);
+	    opCount++;	    
+
+	}
+	else if (isNumber(input.charAt(i)) == false && input.charAt(i) != '-' && opCount == 1) {
+	    op2 = input.charAt(i);
+
+	}
+	else if (numCount == 0) {
+	    num1 = getNextNumber(input,i);
+	    i = i + num1.length-1;
+	    numCount++;
+
+	}
+  	else if (numCount == 1) {
+	    num2 = getNextNumber(input,i);
+	    i = i + num2.length-1;
+	    numCount++;
+
+	}
+	else if (numCount > 1) {
+	    num3 = getNextNumber(input,i);
+	    i = i + num3.length-1;
+
+	}
+	
+	else{
+	    return "NaN"
+	}
+	
+    }
+
+    if (op1 == '/' || op1 == '*') {
+	result1 = operation(num1,num2,op1);
+	result2 = operation(result1,num3,op2);
+	return result2;
+    }
+    else {
+	result1 = operation(num2,num3,op2);
+	result2 = operation(num1,result1,op1);
+	return result2;
+    }    
+}
+
+												  
+    </script>
+
+  </head>
+
+  <body>
+    <form action = "" name="calculator" >
+      <table summary = "" align="center">
+	<tr>
+          <td colspan="2"><input type="text" name="screen" size="20"></td>
+    	  <td colspan="2"><input type="text" name="result" size="20"></td>
+	</tr>
+	<tr>
+    	  <td><input type="button" class="operator" name="." value="." onclick="calculator.screen.value += '.' "></td>
+
+          <td><input type="button" class="operator" name="par1" value="(" onclick="calculator.screen.value += '(' "></td>
+	  <td><input type="button" class="operator" name="par2" value=")" onclick="calculator.screen.value += ')' "></td>
+	  <td><input type="button" class="operator" name="back" value="delete" onclick="calculator.screen.value = calculator.screen.value.substring(0,calculator.screen.value.length-1) "></td>
+
+	</tr>
+	<tr>
+	  <td><input type="button" class="number"   name="7" value="7" onclick="calculator.screen.value += '7' "></td>
+	  <td><input type="button" class="number"   name="8" value="8" onclick="calculator.screen.value += '8' "></td>
+	  <td><input type="button" class="number"   name="9" value="9" onclick="calculator.screen.value += '9' "></td>
+	  <td><input type="button" class="operator" name="/" value="/" onclick="calculator.screen.value += '/' "></td>
+	</tr>
+	<tr>
+	  <td><input type="button" class="number"   name="4"  value="4" onclick="calculator.screen.value += '4' "></td>
+	  <td><input type="button" class="number"   name="5"  value="5" onclick="calculator.screen.value += '5' "></td>
+	  <td><input type="button" class="number"   name="6"  value="6" onclick="calculator.screen.value += '6' "></td>
+	  <td><input type="button" class="operator" name="+"  value="+" onclick="calculator.screen.value += '+' "></td>
+
+	</tr>
+	<tr>
+	  <td><input type="button" class="number"   name="1"  value="1" onclick="calculator.screen.value += '1' "></td>
+	  <td><input type="button" class="number"   name="2"  value="2" onclick="calculator.screen.value += '2' "></td>
+	  <td><input type="button" class="number"   name="3"  value="3" onclick="calculator.screen.value += '3' "></td>
+	  <td><input type="button" class="operator" name="-"  value="-" onclick="calculator.screen.value += '-' "></td>
+	</tr>
+	<tr>
+    <td><input type="button" class="number"   name="0" value="0" onclick="calculator.screen.value += '0' "></td>
+        <td><input type="button" class="w3-btn" id="clear" name="C" value="C" onclick="calculator.screen.value = ''"></td>
+	  <td><input type="button" class="equals"   id="equals" name="=" value="=" onclick="calculator.result.value = traverseCalc(calculator.screen.value)"></td>
+	  <td><input type="button" class="operator" name="X" value="X" onclick="calculator.screen.value += '*' "></td>
+	</tr>
+      </table>
+    </form>
+
+
+    
+    <script type = "text/javascript">
+
+   
+      //userInput = window.prompt("Enter a simple equation");
+
+
+      //result = traverseCalc(userInput);
+
+      //document.write("Input: " + userInput + ", Result: "+ result + " ");
+
+    </script>
+
+</body>
+</html>
+
+

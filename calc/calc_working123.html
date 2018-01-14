@@ -1,0 +1,212 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>
+    Simple Calculator
+</title>
+    </head>
+    <body>
+    
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+function isOp(num){
+    if (num == '/'){
+	return true;
+    }
+    else if (num == '*'){
+	return true;
+    }
+    else if (num == '+'){
+	return true;
+    }
+    else if (num == '-'){
+	return true;
+    }
+    else{
+	return false;
+    }
+}
+
+function operation(op1,op2,oper){
+    if (oper == '/'){
+	return parseFloat(op1) / parseFloat(op2);
+    }
+    else if (oper == '*'){
+	return parseFloat(op1) * parseFloat(op2);
+    }
+    else if (oper == '+' || '-'){
+	return parseFloat(op1) + parseFloat(op2);
+    }
+    else{
+	return 1337; //should not happen
+    }
+}
+
+
+function getNextNumber(numString,index){
+
+    var returnNumber = "";
+    var minusCount = 0;
+    
+    for(var i = index; i < numString.length; i++){
+
+	if (isNumber(numString.charAt(i)) == false){
+	    
+	    if (numString.charAt(i) == '-' && index == 0 && minusCount < 1) {
+		returnNumber = returnNumber + "-";
+		minusCount++;
+	    }
+	    
+	    else if(numString.charAt(i) == '-' && isNumber(numString.charAt(i+1)) && minusCount < 1){
+		returnNumber = returnNumber + numString.substring(i,i+1);
+		minusCount++;
+	    }
+	    
+	    else{
+		break;
+	    }
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == false){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	    break;
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == true){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	}
+	
+    }
+    return returnNumber;
+}
+
+function getNextExpression(numString,index){
+    var expression = "";
+    for(var i = index; i < numString.length; i++) {
+	if(numString.charAt(i) == ')'){
+	    return expression;
+	}
+	else{
+	    expression = expression + numString.charAt(i);
+	}
+    }
+}
+
+
+
+function traverseCalc(input){
+    
+    var op1 = "";
+    var op2 = "";
+    var num1 = "0";
+    var num2 = "0";
+    var num3 = "0";
+
+    var numCount = 0;
+    var opCount = 0;
+
+    var result1 = 0;
+    var result2 = 0;
+    
+    for(var i = 0; i < input.length; i++) {
+
+	if (isNumber(input.charAt(i)) == false && input.charAt(i) != '-' && opCount == 0) {
+
+	    op1 = input.charAt(i);
+	    opCount++;	    
+	    document.write('<p>');
+	    document.write("op1 " + op1);
+	    document.write('</p>');
+	}
+	else if (isNumber(input.charAt(i)) == false && input.charAt(i) != '-' && opCount == 1) {
+	    op2 = input.charAt(i);
+	    document.write('<p>');
+	    document.write("op2 " + op2);
+	    document.write('</p>');
+	}
+	else if (numCount == 0) {
+	    num1 = getNextNumber(input,i);
+	    i = i + num1.length-1;
+	    numCount++;
+	    document.write('<p>');
+	    document.write("num1 " + num1);
+	    document.write('</p>');
+	}
+  	else if (numCount == 1) {
+	    num2 = getNextNumber(input,i);
+	    i = i + num2.length-1;
+	    numCount++;
+	    document.write('<p>');
+	    document.write("num2 " + num2);
+	    document.write('</p>');
+	}
+	else if (numCount > 1) {
+	    num3 = getNextNumber(input,i);
+	    i = i + num3.length-1;
+	    document.write('<p>');
+	    document.write("num3 " + num3);
+	    document.write('</p>');
+	}
+	
+	else{
+	    return "NaN"
+	}
+	
+    }
+
+    if (op1 == '/' || op1 == '*') {
+	result1 = operation(num1,num2,op1);
+	result2 = operation(result1,num3,op2);
+	return result2;
+    }
+    else {
+	result1 = operation(num2,num3,op2);
+	result2 = operation(num1,result1,op1);
+	return result2;
+    }    
+}
+
+function traverseCalc2(input){
+
+    var numArray = [];
+    
+    
+}
+
+
+userInput = window.prompt("Enter a simple equation");
+
+
+result = traverseCalc(userInput);
+
+document.write('<p>');
+document.write("Input: " + userInput + ", Result: "+ result + " ");
+document.write('</p>');
+
+document.write('<p>');
+document.write(getNextNumber("1-2",0));
+document.write('</p>');
+
+
+
+</script>
+
+</body>
+</html>

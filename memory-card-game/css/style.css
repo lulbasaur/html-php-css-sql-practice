@@ -1,0 +1,109 @@
+#title {
+  	font-size:100px;
+  font-family:Arial;
+  color: #f03700;
+  text-align: center;
+  padding-top: 5%;
+  padding-bottom: 0%;
+
+}
+#trys {
+  	font-size:50px;
+
+  font-family:Arial;
+  color: #f03700;
+  text-align: center;
+}
+
+
+button {
+  margin:auto;
+  display:block;
+	background-color:#40C767;
+	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #186629;
+	color:#ffffff;
+	font-family:Arial;
+	font-size:132px;
+	padding:16px 31px;
+}
+
+
+
+body {
+  background-image: url("http://cdn.wallpapersafari.com/73/36/9sPvzK.jpg");
+  background-size: 100%;
+  height: 1054px;
+}
+
+.grid-container {
+  margin: auto;
+  width: 550px;
+  height: 440px;
+
+}
+
+.card-container {
+  float: left;
+  width: 100px;
+  height: 100px;
+  padding-left: 10px;
+    padding-bottom: 10px;
+
+  	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+}
+
+.card {
+  position: relative;
+  float: left;
+  text-align: center;
+  -moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+  
+}
+
+.card_front,
+.card_back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100px;
+}
+
+.card_front,
+.card_back {
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+}
+
+.card_front {
+  background-color: #40C767;
+  	-moz-border-radius:28px;
+	-webkit-border-radius:28px;
+	border-radius:28px;
+	border:1px solid #186629;
+}
+
+.card_back {
+  background-color: #008989;
+  -webkit-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+.card.effect_on_click.flipped .card_front {
+  -webkit-transform: rotateY(-180deg);
+  transform: rotateY(-180deg);
+}
+
+.card.effect_on_click.flipped .card_back {
+  -webkit-transform: rotateY(0);
+  transform: rotateY(0);
+}

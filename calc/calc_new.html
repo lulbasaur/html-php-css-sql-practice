@@ -1,0 +1,313 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>
+    Simple Calculator
+</title>
+    </head>
+    <body>
+    
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else if (num == '(' || num == ')'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+function isOp(num){
+    if (num == '/'){
+	return true;
+    }
+    else if (num == '*'){
+	return true;
+    }
+    else if (num == '+'){
+	return true;
+    }
+    else if (num == '-'){
+	return true;
+    }
+    else if (num == '(' || num == ')'){
+	return false;
+    }
+    else{
+	return false;
+    }
+}
+
+function operation(op1,op2,oper){
+    if (oper == '/'){
+	return parseFloat(op1) / parseFloat(op2);
+    }
+    else if (oper == '*'){
+	return parseFloat(op1) * parseFloat(op2);
+    }
+    else if (oper == '+'){
+	return parseFloat(op1) + parseFloat(op2);
+    }
+    else if (oper == '-'){
+	return parseFloat(op1) - parseFloat(op2);
+    }
+    else{
+	return 1337; //should not happen
+    }
+}
+
+
+function getNextNumber(numString,index){
+
+    var returnNumber = "";
+    var minusCount = 0;
+    
+    for(var i = index; i < numString.length; i++){
+
+	if (isNumber(numString.charAt(i)) == false){
+	    
+	    if (numString.charAt(i) == '-' && index == 0 && minusCount < 1) {
+		returnNumber = returnNumber + "-";
+		minusCount++;
+	    }
+	    
+	    else if(numString.charAt(i) == '-' && isNumber(numString.charAt(i+1)) && minusCount < 1){
+		returnNumber = returnNumber + numString.substring(i,i+1);
+		minusCount++;
+	    }
+	    
+	    else{
+		break;
+	    }
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == false){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	    break;
+	}
+	else if(isNumber(numString.charAt(i)) && isNumber(numString.charAt(i+1)) == true){
+	    returnNumber  = returnNumber + numString.charAt(i);
+	}
+	
+    }
+    return returnNumber;
+}
+
+function getNextExpression(numString,index){
+    var expression = "";
+    
+    for(var i = index; i < numString.length; i++) {
+	if(numString.charAt(i) == ')'){
+	    return expression;
+	}
+	else{
+	    expression += numString.charAt(i);
+	}
+    }
+}
+
+function arrayAddSub(array){
+    var result = '0';
+    for(var i = 0; i < array.length; i++) {
+	if(i == 0 && isNumber(array[i])){
+	    result = operation(result,array[i],'+');
+	}
+	else if (isNumber(array[i])) {
+	    result = operation(result,array[i],array[i-1]);
+	}
+	else if (i == array.length-1){
+	    result = operation(result,array[i],array[i-1]);
+	}
+    }
+    
+    return result;
+}
+
+
+// 3+4 ( ( 2+2 ) * 3 )
+function traverseCalc(input){
+
+    var expressionList = [];
+    
+    var nextNum = "";
+    var nextOp = "";
+    //parse to array
+    var exp = "";
+    //2+34/4-(5/6 + 2 ) - (563/3)--23
+    //01234567891011121314
+    for(var i = 0; i < input.length; i++) {
+	if (input.charAt(i) == ')') {
+	    if (i != input.length-1 && (isNumber(input.charAt(i+1)) || input.charAt(i+1) == '(')){
+		expressionList.push('*');
+		document.write('<p>');
+		document.write("found ) array1: " + expressionList + "   i: " + i);
+		document.write('</p>');
+	    }
+	}
+	else if (input.charAt(i) == '(') {
+	    if (i != 0){
+		if (isNumber(input.charAt(i-1))) {
+		    expressionList.push('*');
+		}
+		exp = getNextExpression(input,i+1);
+		
+		document.write('<p>');
+		document.write("exp1: " + exp);
+		document.write('</p>');
+		
+		expressionList.push(traverseCalc(exp));
+		i = i + exp.length;
+		
+		document.write('<p>');
+		document.write("array1: " + expressionList + "   i: " + i);
+		document.write('</p>');
+	    }
+	    else{
+		exp = getNextExpression(input,i+1);
+		document.write('<p>');
+		document.write("exp2: " + exp);
+		document.write('</p>');
+		expressionList.push(traverseCalc(exp));
+		i = i + exp.length;
+		document.write('<p>');
+		document.write("array2: " + expressionList + "   i: " + i);
+		document.write('</p>');
+	    }
+	}
+	else{
+	    nextNum = getNextNumber(input,i);
+	    document.write('<p>');
+	    document.write("nextNum1: " + nextNum);
+	    document.write('</p>');
+    	    if(nextNum != ""){
+		expressionList.push(nextNum);
+		i = i + nextNum.length;
+	    }
+	    document.write('<p>');
+	    document.write("array3: " + expressionList + "   i: " + i);
+	    document.write('</p>');
+	    
+	    if (i < input.length-1) {
+		nextOp = input.charAt(i);
+		document.write('<p>');
+		document.write("nextOp: " + nextOp);
+		document.write('</p>');
+		if (isOp(nextOp)) {
+    		    expressionList.push(nextOp);
+		}
+		document.write('<p>');
+		document.write("array4: " + expressionList + "   i: " + i);
+		document.write('</p>');
+	    }
+	}
+    }
+
+	document.write('<p>');
+	document.write("end parse: " + expressionList);
+	document.write('</p>');
+
+
+    
+    //end parse    
+    var additionSubtraction = [];
+    var current = '0';
+    for(var i = 0; i < expressionList.length; i++) {
+	if (expressionList[i] == ')') {
+	    break;
+	}
+	else if (isOp(expressionList[i])) {
+	    
+	    if(expressionList[i] == '+' || expressionList[i] == '-'){
+
+		if (current != 0) {
+		    additionSubtraction.push(current.toString());		    
+		}
+
+		current = 0;
+		if (i == expressionList.length-2) {
+
+		    if (expressionList[i-1] != null) {
+			additionSubtraction.push(expressionList[i-1]);
+		    }
+		    additionSubtraction.push(expressionList[i]);
+		    additionSubtraction.push(expressionList[i+1]);
+
+		}
+		else if(expressionList[i-1] != null){
+		    additionSubtraction.push(expressionList[i-1]);
+		    additionSubtraction.push(expressionList[i]);
+		    
+		}
+		else{
+		    additionSubtraction.push(expressionList[i]);
+		    		    
+		}
+		
+	    }
+	    else if(expressionList[i] == '*' || expressionList[i] == '/'){
+		if (i == expressionList.length - 2) {
+		    if (expressionList[i-1] != null) {
+			current = operation(expressionList[i-1],expressionList[i+1],expressionList[i]);
+		    }
+		    else{
+			current = operation(current,expressionList[i+1],expressionList[i]);
+		    }
+		    additionSubtraction.push(current);
+		}
+		else if(expressionList[i-1] != null){
+		    
+		    current = operation(expressionList[i-1],expressionList[i+1],expressionList[i]);
+		    expressionList[i-1] = null;
+		    expressionList[i+1] = null;
+
+		}
+		else if (expressionList[i-1] == null) {
+		    current = operation(current,expressionList[i+1],expressionList[i]);
+		    expressionList[i+1] = null;
+		}
+	    }
+	}
+	
+    }
+
+    current = arrayAddSub(additionSubtraction);
+
+    document.write('<p>');
+    document.write("end travCalc addsub: " + additionSubtraction);
+    document.write('</p>');	
+
+    return current;
+}
+
+
+
+
+userInput = window.prompt("Enter a simple equation");
+
+
+result = traverseCalc(userInput);
+
+document.write('<p>');
+document.write("Input: " + userInput + ", Result: "+ result + " ");
+document.write('</p>');
+
+
+
+
+</script>
+
+</body>
+</html>

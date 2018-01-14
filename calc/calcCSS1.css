@@ -1,0 +1,63 @@
+
+
+
+input[type=text] {
+    width: 100%;
+    padding: 10px 10px;
+    margin: 10px 10;
+    box-sizing: border-box;
+    border: 8px solid #F666FA;
+    background-color:lightblue;
+    font-family: Courier;
+}
+
+
+input[type=button] {
+    width: 100%;
+    padding: 10px 10px;
+    margin: 0px 0px;
+    box-sizing: border-box;
+    border: 8px solid #AA30FA;
+    background-color: lightcyan;
+    font-family: fantasy;
+    font-weight: bold;
+
+}
+
+input[type="button"]:hover {
+    border: 8px solid #FBCD00;
+    background-color:aqua;
+    font-family: fantasy;
+    font-weight: bold;	
+    
+}
+
+input.number{
+
+    background-color: lightblue;
+    
+}
+
+input.operator{
+    background-color: #F699FA;
+}
+
+
+input.equals{
+    background-color: lightgreen;   
+}
+
+#clear{
+
+    background-color: lightsalmon;
+    
+}
+#form{
+
+    width: 50%;
+}
+
+body{
+    background-color: #F666FA;
+    background-image: url(kitty.jpeg);
+}

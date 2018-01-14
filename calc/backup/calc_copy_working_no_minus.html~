@@ -1,0 +1,117 @@
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <title>
+    Simple Calculator
+</title>
+    </head>
+    <body>
+    
+
+    <script type = "text/javascript">
+
+function isNumber(num){
+    if (num == '/'){
+	return false;
+    }
+    else if (num == '*'){
+	return false;
+    }
+    else if (num == '+'){
+	return false;
+    }
+    else if (num == '-'){
+	return false;
+    }
+    else{
+	return true;
+    }
+}
+
+function operation(op1,op2,oper){
+    if (oper == '/'){
+	return parseInt(op1) / parseInt(op2);
+    }
+    else if (oper == '*'){
+	return parseInt(op1) * parseInt(op2);
+    }
+    else if (oper == '+'){
+	return parseInt(op1) + parseInt(op2);
+    }
+    else{
+	return parseInt(op1) - parseInt(op2);
+    }
+}
+
+function traverseCalc(input){
+    
+    var op1 = "";
+    var op2 = "";
+    var num1 = "";
+    var num2 = "";
+    var num3 = "";
+
+    var numCount = 0;
+    var opCount = 0;
+
+    var result1 = 0;
+    var result2 = 0;
+    
+    for(var i = 0; i < input.length; i++) {
+    
+	if (isNumber(input.charAt(i)) && numCount == 0) {
+	    num1 = input.charAt(i)
+	    numCount++;	    
+	}
+  	else if (isNumber(input.charAt(i)) && numCount == 1) {
+	    num2 = input.charAt(i);
+	    numCount++;	    
+	}
+	else if (isNumber(input.charAt(i)) && numCount == 2) {
+	    num3 = input.charAt(i);
+	    
+	}
+	else if (isNumber(input.charAt(i)) == false && opCount == 0) {
+	    
+	    	    
+		op1 = input.charAt(i);
+		opCount++;
+	    
+	    
+	}
+	else if (isNumber(input.charAt(i)) == false && opCount == 1) {
+	    op2 = input.charAt(i);
+	}	
+	else{
+	    return "NaN"
+	}
+	
+    }
+
+    if (op1 == '/' || op1 == '*') {
+	result1 = operation(num1,num2,op1);
+	result2 = operation(result1,num3,op2);
+	return result2;
+    }
+    else {
+	result1 = operation(num2,num3,op2);
+	result2 = operation(num1,result1,op1);
+	return result2;
+    }    
+}
+
+
+
+
+userInput = window.prompt("Enter a simple equation");
+
+
+
+result = traverseCalc(userInput);
+
+document.write("Input: " + userInput + ", Result: "+ result + " ");
+
+</script>
+
+</body>
+</html>

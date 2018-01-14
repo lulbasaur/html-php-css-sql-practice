@@ -1,0 +1,71 @@
+import java.util.Scanner;
+import java.io.*;
+
+
+
+
+
+class TextConverter{
+
+
+
+    public static String open_file (String file_path) throws IOException,FileNotFoundException{
+
+	String everything = "";
+	BufferedReader br = new BufferedReader(new FileReader(file_path));
+
+	try {
+	    StringBuilder sb = new StringBuilder();
+	    String line = br.readLine();
+	    while (line != null) {
+		sb.append(line);
+		sb.append(System.lineSeparator());
+		line = br.readLine();
+	    }
+	    everything = sb.toString();
+	}
+	catch (FileNotFoundException e) {
+	    e.printStackTrace();
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+	}
+	finally {
+	    br.close();
+	}
+	return everything;
+
+    }
+
+
+    public static void write_file (String str){
+	try{
+	    PrintWriter writer = new PrintWriter("new_textfile.txt", "UTF-8");
+	    writer.println(str);
+	    writer.close();
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
+	
+	
+    }
+    public static void main(String[] args) {
+
+	if (args.length != 1){
+	    System.out.print( "usage: [filename]\n");
+	}
+	else{
+	    try{
+		String file_string = open_file(args[0]);
+		System.out.print(file_string.toUpperCase());
+		write_file(file_string.toUpperCase());
+	    }catch (FileNotFoundException e) {
+		e.printStackTrace();
+	    }catch (IOException e) {
+		e.printStackTrace();
+	    }	  
+
+	}    
+    }
+
+}
